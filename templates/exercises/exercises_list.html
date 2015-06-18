@@ -1,0 +1,10 @@
+<ul class="nav nav-list">
+  {% if exercise_list %}    
+    {% for exercise in exercise_list %}
+      <li class="withripple"><a href="/exercises/{{exercise.name}}">{{ exercise.title }}</a></li>
+    {% endfor %}
+      <li><button id="see_all" class="btn btn-primary">See all exercises</button></li>  
+  {% else %}
+      <li>No exercises present.</li>
+  {% endif %}
+</ul>

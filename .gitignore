@@ -1,0 +1,10 @@
+*~
+*.pyc
+*.pyd
+*.pyo
+__pycache__/
+*.so
+*.log
+*.pot
+*.swp
+*.swo

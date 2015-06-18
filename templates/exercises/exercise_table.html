@@ -1,0 +1,45 @@
+{% extends 'exercises/base.html' %}
+{% block body_block %}
+<div class="span9">
+
+  <h2 class="sub-header">Exercises</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Slug</th>
+          <th>Videos</th>
+          <th>Prerequisites</th>
+          <th>Mission</th>
+          <th>CCSS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for exercise in exercises %}
+        <tr>
+          <td>{{exercise.title}}</td>
+          <td><a href="{{exercise.ka_url}}" target="_blank">{{ exercise.name }}</a></td>
+          <td>
+              {% if exercise.related_videos %}
+                  {% for rv in exercise.related_videos %}
+                    <a href="{{exercise.ka_url}}">{{ rv }}</a><br/>
+                  {% endfor %}
+              {% endif %}
+          </td>
+          <td>
+              {% if exercise.prerequisites %}
+                  {% for pr in exercise.prerequisites %}
+                      <a href="/exercises/{{pr}}">{{ pr }}</a><br/>
+                  {% endfor %}
+              {% endif %}
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div><!--./table-responsive-->
+</div><!--./main-->
+{% endblock %}

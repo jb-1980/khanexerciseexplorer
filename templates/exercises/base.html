@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- Bootstrap -->
+      <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+      <!-- Include roboto.css to use the Roboto web font, material.css to include the theme and ripples.css to style the ripple effect -->
+      <link href="{% static 'css/roboto.min.css' %}" rel="stylesheet">
+      <link href="{% static 'css/material-fullpalette.min.css' %}" rel="stylesheet">
+      <link href="{% static 'css/ripples.min.css' %}" rel="stylesheet">
+      
+      <!--<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">-->
+      <title>Khan Exercises - {% block title %}Home{% endblock %}</title>
+      <style>
+        .white, .white a {
+          color:#fff;
+        }
+        
+        /*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ *
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}*/
+      </style>
+  </head>
+
+  <body>
+    <div class="bs-component">
+        <div class="navbar navbar-default navbar-fixed-top">
+<!--            <div class="navbar-header">-->
+<!--                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">-->
+<!--                    <span class="icon-bar"></span>-->
+<!--                    <span class="icon-bar"></span>-->
+<!--                    <span class="icon-bar"></span>-->
+<!--                </button>-->
+<!--              <a class="navbar-brand" href="javascript:void(0)">Brand</a>-->
+<!--            </div>-->
+            <div class="navbar-collapse collapse navbar-responsive-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Skill View</a></li>
+                    <li><a href="/exercises/exercise_table/">Matrix View</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/">Home</a>
+          
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right">
+              {% if user.is_authenticated %}
+              <li class="navbar-text">Welcome, {{user.username}}</li>
+              <li><a href="/exercises/profile/">Profile</a></li>
+              <li><a href="/exercises/logout/">Logout</a></li>
+              {% else %}
+              <li><a href="/exercises/register/">Register</a></li>
+              <li><a href="/exercises/login/">Login</a></li>
+              {% endif %}
+            </ul>
+            <ul class="nav">
+              {% if user.is_authenticated %}
+              <li><a href="/exercises/restricted/">Restricted</a></li>
+              
+              {% endif %}
+              <li><a href="/exercises/about/">About</a></li>
+              <li><a href="/exercises/exercise_table/">Matrix View</a></li>
+              <!--<li><a href="/rango/search/">Search</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+<!--        </div><!--/.container-fluid-->
+<!--      </div><!--/.navbar-inner-->
+<!--    </div><!--/navbar navbar-inverse navbar-fixed-top-->
+      
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-4 col-md-3 sidebar">
+          <ul class="nav nav-list">
+              <form>
+                <div class="form-group">
+                <li><input class="form-control floating-label" type="text" name="suggestion" value="" id="suggestion" placeholder="Type to find an exercise"/></li>
+                <span class="material-input"></span>
+                </div>
+              </form>
+          </ul>
+          {% if exercise_list %}
+          <div id="exercises">
+              {% include 'exercises/exercises_list.html' with exercise_list=exercise_list %}
+          </div>
+          {% endif %}
+        </div><!--/.sidebar-->
+        <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+            {% block body_block %}
+            {% endblock %}            
+        </div><!--/main-->
+      </div><!--/row-->     
+    </div><!--/.container-fluid-->
+
+    <hr/>
+    <footer>
+      <p style="text-align:center;">&copy; Khan Exercise Explorer - Gilgen Labs 2015</p>
+    </footer> 
+   
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/material.min.js' %}"></script>
+    <script src="{% static 'js/ripples.min.js' %}"></script>
+    <script src="{% static 'js/exercises-ajax.js' %}"></script>
+    <script>
+      $.material.init();
+    </script>
+  </body>
+</html>

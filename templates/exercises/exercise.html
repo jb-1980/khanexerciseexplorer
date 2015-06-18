@@ -1,0 +1,65 @@
+{% extends 'exercises/base.html' %}
+
+{% block title %}{{ exercise.title }}{% endblock %}
+
+{% block body_block %}
+  <div class="">
+    {% if exercise %}
+    <h2>{{ exercise.title }}</h2>
+    <div id="image" style="float:left;padding-right:10px;">
+      <img src="{{ exercise.image_url_256 }}" class="img-thumbnail" style="width:256px; height:256px;padding:20px;background-color:white;" />
+    </div>
+    <div id="info" style="float:left;">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">URL:</h3>
+        </div>
+        <div class="panel-body">
+          <a href="{{exercise.ka_url}}" target="_blank" style="font-size:1.2em">{{ exercise.ka_url }}</a>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Related Videos:</h3>
+        </div>
+        <div class="panel-body">
+         {% if videos %}
+            {% for rv in videos%}
+              <a href="{{rv.videoid.ka_url}}" style="font-size:1.2em">{{ rv.videoid.title }}</a><br/>
+            {% endfor %}
+         {% endif %}
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Prerequisites:</h3>
+        </div>
+        <div class="panel-body">
+         {% if prerequisites %}
+            {% for pr in prerequisites %}
+              <a href="/exercises/{{pr.exercise.name}}" style="font-size:1.2em">{{ pr.exercise.title }}</a><br/>
+            {% endfor %}
+         {% endif %}
+        </div>
+      </div>
+    </div>
+    <div style="clear:both;"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Description:</h3>
+        </div>
+        <div class="panel-body">
+          {{ exercise.description }}
+        </div>
+      </div>
+    {% else %}
+    <h3>There is no data for this exercise</h3>
+    {% endif %}
+  </div>
+  <script>
+    $("#image").popover({
+        html:true,
+        content:'<img src="'+$(this).attr('src').slice(-4)+'"/>";
+    });
+  </script>
+{% endblock %}
