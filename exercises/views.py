@@ -53,7 +53,6 @@ def exercise(request,exercise_name_url):
     exercise_list = get_exercise_list()
     template_name = 'exercises/exercise.html'
     context_dict = {'exercise_list':exercise_list,}
-    print('exercises was activated')
     views = 0
     try:
         # Find the category with the given name.
@@ -72,7 +71,6 @@ def exercise(request,exercise_name_url):
         context_dict['prerequisites'] = prerequisites
         context_dict['videos']=videos
         #videos = json.loads(exercise.videos)
-        print(prerequisites)
     except Exercises.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything - the template displays the "no category" message for us.
