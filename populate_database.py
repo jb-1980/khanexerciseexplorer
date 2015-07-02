@@ -2,6 +2,8 @@
 import os
 from getexercises import get_exercises
 from django.db import IntegrityError
+from makecommoncore import MakeCommonCore
+from django.core.exceptions import ObjectDoesNotExist
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -17,7 +19,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 def populate():
 
-    exercise_dict = get_exercises(BASE_DIR+'/cachedskills.json',0)
+    exercise_dict = get_exercises(BASE_DIR+'/cachedskills.json')
     print(len(exercise_dict))
     for exercise in exercise_dict:
 
@@ -64,6 +66,20 @@ def populate():
 
     # TODO Print out what we have added to the console.
 
+def populate_cc():
+    cc = MakeCommonCore()
+    cc_data = cc.quickly()
+    for data in cc_data:
+        category = data['category']
+        strand = data['strand']
+        standard = data['standard']
+        description = 'None yet'
+        cc_obj = add_commoncore(category,strand,standard,description)
+        try:
+            exercise = Exercises.objects.get(name=data['skill'])
+        except ObjectDoesNotExist:
+            continue
+        add_commoncore_map(cc_obj,exercise)
 
 def add_exercise(name,image_url_256,ka_url,title,description):
     fields = {
@@ -105,6 +121,28 @@ def add_related_video(videoid,exercise):
         exercise=exercise,
         defaults=fields)[0]
 
+def add_commoncore(category,strand,standard,description):
+    fields = {
+        'category':category,
+        'strand':strand,
+        'standard':standard,
+        'description':description,
+    }
+    return CommonCore.objects.update_or_create(
+        standard=standard,
+        defaults=fields)[0]
+
+def add_commoncore_map(commoncore,exercise):
+    fields = {
+        'standard':commoncore,
+        'exercise':exercise,
+    }
+    return CommonCoreMap.objects.update_or_create(
+        standard=commoncore,
+        exercise=exercise,
+        defaults=fields)[0]
+       
+
 # Start execution here!
 if __name__ == '__main__':
     print("Starting population script...")
@@ -113,4 +151,5 @@ if __name__ == '__main__':
     django.setup()
     from exercises.models import *
 
-    populate()
+    #populate()
+    populate_cc()

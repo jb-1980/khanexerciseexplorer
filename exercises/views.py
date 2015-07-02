@@ -5,8 +5,8 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from datetime import datetime, timedelta
-from exercises.models import Exercises,Prerequisites,Videos,RelatedVideos
-import json
+from exercises.models import Exercises,Prerequisites,Videos,RelatedVideos,CommonCoreMap,CommonCore
+
 # Create your views here.
 
 def get_exercise_list(max_results=0,starts_with='',see=False):
@@ -27,8 +27,20 @@ def get_exercise_list(max_results=0,starts_with='',see=False):
 
 def exercise_table(request):
     exercises = Exercises.objects.order_by('title')
+    context_dict = {'exercises':[]}
+    for exercise in exercises:
+        try:
+            context_dict['exercises'].append({
+                'cc':CommonCoreMap.objects.filter(exercise=exercise),
+                'exercise':exercise
+                })            
+        except CommonCoreMap.DoesNotExist:
+            context_dict['exercises'].append({
+                'cc':None,
+                'exercise':exercise
+                })
     template_name = 'exercises/exercise_table.html'
-    context_dict = {'exercises':exercises}
+    
     return render(request,template_name,context_dict)
     
 def exercise(request,exercise_name_url):
@@ -75,5 +87,5 @@ def suggest_exercises(request):
 def see_all(request):
     exercise_list = get_exercise_list(see=True)
     print ('this was activated')
-    return render(request,'exercises/exercises_list.html',{'exercise_list':exercise_list})    
+    return render(request,'exercises/exercises_list.html',{'exercise_list':exercise_list})
     

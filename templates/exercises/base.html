@@ -128,14 +128,6 @@ body {
   <body>
     <div class="bs-component">
         <div class="navbar navbar-default navbar-fixed-top">
-<!--            <div class="navbar-header">-->
-<!--                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">-->
-<!--                    <span class="icon-bar"></span>-->
-<!--                    <span class="icon-bar"></span>-->
-<!--                    <span class="icon-bar"></span>-->
-<!--                </button>-->
-<!--              <a class="navbar-brand" href="javascript:void(0)">Brand</a>-->
-<!--            </div>-->
             <div class="navbar-collapse collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="/">Skill View</a></li>
@@ -144,48 +136,16 @@ body {
             </div>
         </div>
     </div>
-    <!--<div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="/">Home</a>
-          
-          <div class="nav-collapse collapse">
-            <ul class="nav pull-right">
-              {% if user.is_authenticated %}
-              <li class="navbar-text">Welcome, {{user.username}}</li>
-              <li><a href="/exercises/profile/">Profile</a></li>
-              <li><a href="/exercises/logout/">Logout</a></li>
-              {% else %}
-              <li><a href="/exercises/register/">Register</a></li>
-              <li><a href="/exercises/login/">Login</a></li>
-              {% endif %}
-            </ul>
-            <ul class="nav">
-              {% if user.is_authenticated %}
-              <li><a href="/exercises/restricted/">Restricted</a></li>
-              
-              {% endif %}
-              <li><a href="/exercises/about/">About</a></li>
-              <li><a href="/exercises/exercise_table/">Matrix View</a></li>
-              <!--<li><a href="/rango/search/">Search</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-<!--        </div><!--/.container-fluid-->
-<!--      </div><!--/.navbar-inner-->
-<!--    </div><!--/navbar navbar-inverse navbar-fixed-top-->
-      
+
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-4 col-md-3 sidebar">
           <ul class="nav nav-list">
               <form>
                 <div class="form-group">
-                <li><input class="form-control floating-label" type="text" name="suggestion" value="" id="suggestion" placeholder="Type to find an exercise"/></li>
+                <li>
+                  <input class="form-control floating-label" type="text" name="suggestion" value="" id="suggestion" placeholder="Type to find an exercise"/>
+                </li>
                 <span class="material-input"></span>
                 </div>
               </form>

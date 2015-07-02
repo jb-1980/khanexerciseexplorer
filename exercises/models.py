@@ -35,3 +35,28 @@ class RelatedVideos(models.Model):
     
     def __unicode__(self):
         return self.videoid.title
+
+class Units(models.Model):
+    name = models.CharField(max_length=128)
+    mission = models.CharField(max_length=128)
+    sequenceid = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return self.name
+
+class CommonCore(models.Model):
+    category = models.CharField(max_length=128)
+    strand = models.CharField(max_length=128)
+    standard = models.CharField(max_length=128,unique=True)
+    description = models.TextField(blank=True)
+    
+    def __unicode__(self):
+        return self.standard
+
+class CommonCoreMap(models.Model):
+    standard = models.ForeignKey('CommonCore',to_field="standard")
+    exercise = models.ForeignKey('Exercises',to_field="name")
+    
+    def __unicode__(self):
+        return self.standard
+    
