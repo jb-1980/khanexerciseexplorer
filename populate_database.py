@@ -151,5 +151,5 @@ if __name__ == '__main__':
     django.setup()
     from exercises.models import *
 
-    #populate()
+    populate()
     populate_cc()

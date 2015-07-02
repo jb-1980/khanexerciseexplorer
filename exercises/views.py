@@ -29,15 +29,21 @@ def exercise_table(request):
     exercises = Exercises.objects.order_by('title')
     context_dict = {'exercises':[]}
     for exercise in exercises:
+        prerequisites = Prerequisites.objects.filter(requiredfor=exercise.name)
+        videos = RelatedVideos.objects.filter(exercise=exercise)
         try:
             context_dict['exercises'].append({
                 'cc':CommonCoreMap.objects.filter(exercise=exercise),
-                'exercise':exercise
+                'exercise':exercise,
+                'prerequisites':prerequisites,
+                'videos':videos,
                 })            
         except CommonCoreMap.DoesNotExist:
             context_dict['exercises'].append({
                 'cc':None,
-                'exercise':exercise
+                'exercise':exercise,
+                'prerequisites':prerequisites,
+                'videos':videos,
                 })
     template_name = 'exercises/exercise_table.html'
     

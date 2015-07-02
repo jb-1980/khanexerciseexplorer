@@ -8,7 +8,7 @@
       <thead>
         <tr>
           <th>Title</th>
-          <th>Slug</th>
+          <th>Description</th>
           <th>Videos</th>
           <th>Prerequisites</th>
           <th>Mission</th>
@@ -18,19 +18,19 @@
       <tbody>
         {% for skill in exercises %}
         <tr>
-          <td>{{skill.exercise.title}}</td>
-          <td><a href="{{skill.exercise.ka_url}}" target="_blank">{{ skill.exercise.name }}</a></td>
+          <td><a href="{{skill.exercise.ka_url}}" target="_blank">{{skill.exercise.title}}</a></td>
+          <td>{{ skill.exercise.description }}</a></td>
           <td>
-              {% if skill.exercise.related_videos %}
-                  {% for rv in skill.exercise.related_videos %}
-                    <a href="{{skill.exercise.ka_url}}">{{ rv }}</a><br/>
+              {% if skill.videos%}
+                  {% for rv in skill.videos %}
+                    <a href="{{rv.videoid.ka_url}}">{{ rv.videoid.title }}</a><br/>
                   {% endfor %}
               {% endif %}
           </td>
           <td>
-              {% if skill.exercise.prerequisites %}
-                  {% for pr in skill.exercise.prerequisites %}
-                      <a href="/exercises/{{pr}}">{{ pr }}</a><br/>
+              {% if skill.prerequisites %}
+                  {% for pr in skill.prerequisites %}
+                    <a href="/exercises/{{pr.exercise.name}}">{{ pr.exercise.title }}</a><br/>
                   {% endfor %}
               {% endif %}
           </td>
