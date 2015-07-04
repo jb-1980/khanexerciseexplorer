@@ -22,6 +22,7 @@ def fetch_exercises():
                   'url':vid['ka_url'],
               })
         exer[e['name']]={
+            'ka_id':e['id'],
             'name':e['name'],
             'image_url_256':e['image_url_256'],
             'ka_url':e['ka_url'],
@@ -51,26 +52,6 @@ def get_exercises(cachedir,expired=7):
             exer = json.loads(f.read())
 
     return exer
-
-def makeCSV():
-    with io.open('exercises.tsv', 'w', encoding='utf-8') as f:
-
-        header = 'Exercise Name\tSlug\tRelated Videos\tPrerequisites\tCommon Core Standards\tMissions/Units\n'
-        f.write(unicode(header))
-
-        data = getExercises()
-        for exercise in data:
-            videos = ','.join(data[exercise]['related_videos'])
-            pres = []
-            for prereq in data[exercise]['prerequisites']:
-                if prereq in data:
-                    url = data[prereq]['ka_url']
-                    pres.append('=hyperlink("'+url+'","'+prereq+'")')
-            prerequisites = ','.join(pres)
-            row = exercise+'\t'+data[exercise]['title']+'\t'+videos+'\t'+prerequisites+'\t\t\n'
-            f.write(unicode(row))
-
-
 
 if __name__ == '__main__':
     exercises = getExercises()

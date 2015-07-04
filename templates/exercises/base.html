@@ -131,7 +131,7 @@ body {
             <div class="navbar-collapse collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="/">Skill View</a></li>
-                    <li><a href="/exercises/exercise_table/">Matrix View</a></li>
+                    <li><a href="/exercises/matrix_view/">Matrix View</a></li>
                 </ul>
             </div>
         </div>
@@ -140,20 +140,27 @@ body {
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-4 col-md-3 sidebar">
-          <ul class="nav nav-list">
-              <form>
-                <div class="form-group">
-                <li>
-                  <input class="form-control floating-label" type="text" name="suggestion" value="" id="suggestion" placeholder="Type to find an exercise"/>
-                </li>
-                <span class="material-input"></span>
-                </div>
-              </form>
-          </ul>
-          {% if exercise_list %}
-          <div id="exercises">
-              {% include 'exercises/exercises_list.html' with exercise_list=exercise_list %}
-          </div>
+          {% if skill_view %}
+            <ul class="nav nav-list">
+                <form>
+                  <div class="form-group">
+                  <li>
+                    <input class="form-control floating-label" type="text" name="suggestion" value="" id="suggestion" placeholder="Type to find an exercise"/>
+                  </li>
+                  <span class="material-input"></span>
+                  </div>
+                </form>
+            </ul>
+            {% if exercise_list %}
+            <div id="exercises">
+                {% include 'exercises/exercises_list.html' with exercise_list=exercise_list %}
+            </div>
+            {% endif %}
+          {% endif %}
+          {% if matrix_view %}
+            <div id="units">
+                {% include 'exercises/units_list.html' with missions=missions %}
+            </div>
           {% endif %}
         </div><!--/.sidebar-->
         <div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">

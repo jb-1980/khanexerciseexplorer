@@ -5,7 +5,7 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from datetime import datetime, timedelta
-from exercises.models import Exercises,Prerequisites,Videos,RelatedVideos,CommonCoreMap,CommonCore
+from exercises.models import Exercises,Prerequisites,Videos,RelatedVideos,CommonCoreMap,CommonCore,Units,Missions,MissionMap
 
 # Create your views here.
 
@@ -25,34 +25,50 @@ def get_exercise_list(max_results=0,starts_with='',see=False):
         
     return exercise_list
 
-def exercise_table(request):
-    exercises = Exercises.objects.order_by('title')
-    context_dict = {'exercises':[]}
+
+def matrix_view(request):
+    missions = Missions.objects.order_by('sequenceid')
+    print(missions)
+    context_dict = {'matrix_view':True,'missions':missions}
+    template_name = 'exercises/matrix_view.html'
+    
+    return render(request,template_name,context_dict)
+    
+def mission(request,mission):
+    mission_record = Missions.objects.get(slug=mission)
+    print(mission_record.slug)
+    units = Units.objects.filter(mission=mission_record).order_by('sequenceid')
+    exercises = []
+    for unit in units:
+        exercises+=MissionMap.objects.filter(unit=unit)
+    context_dict = {'matrix_view':True,'exercises':[],'missions':units,'mission':mission_record}
     for exercise in exercises:
-        prerequisites = Prerequisites.objects.filter(requiredfor=exercise.name)
-        videos = RelatedVideos.objects.filter(exercise=exercise)
+        prerequisites = Prerequisites.objects.filter(requiredfor=exercise.exercise.name)
+        videos = RelatedVideos.objects.filter(exercise=exercise.exercise.name)
         try:
             context_dict['exercises'].append({
-                'cc':CommonCoreMap.objects.filter(exercise=exercise),
-                'exercise':exercise,
+                'cc':CommonCoreMap.objects.filter(exercise=exercise.exercise),
+                'exercise':exercise.exercise,
                 'prerequisites':prerequisites,
                 'videos':videos,
+                'unit':exercise.unit
                 })            
         except CommonCoreMap.DoesNotExist:
             context_dict['exercises'].append({
                 'cc':None,
-                'exercise':exercise,
+                'exercise':exercise.exercise,
                 'prerequisites':prerequisites,
                 'videos':videos,
+                'unit':exercise.unit
                 })
-    template_name = 'exercises/exercise_table.html'
+    template_name = 'exercises/mission.html'
     
     return render(request,template_name,context_dict)
     
 def exercise(request,exercise_name_url):
     exercise_list = get_exercise_list()
     template_name = 'exercises/exercise.html'
-    context_dict = {'exercise_list':exercise_list,}
+    context_dict = {'skill_view':True,'exercise_list':exercise_list,}
     views = 0
     try:
         # Find the category with the given name.
@@ -66,10 +82,12 @@ def exercise(request,exercise_name_url):
         
         prerequisites = Prerequisites.objects.filter(requiredfor=exercise.name)
         videos = RelatedVideos.objects.filter(exercise=exercise)
+        commoncore = CommonCoreMap.objects.filter(exercise=exercise)
         
         #videos = [i[1:-1] for i in exercise.related_videos[1:-1].split(',')]
         context_dict['prerequisites'] = prerequisites
         context_dict['videos']=videos
+        context_dict['commoncore']=commoncore
         #videos = json.loads(exercise.videos)
     except Exercises.DoesNotExist:
         # We get here if we didn't find the specified category.

@@ -27,3 +27,6 @@ $(document).ready(function(){
             
      
 });
+
+$(".commoncore").popover({
+    });

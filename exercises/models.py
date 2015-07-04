@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Exercises(models.Model):
+    ka_id = models.CharField(max_length=128,unique=True)
     name = models.CharField(max_length=512, unique=True)
     title = models.CharField(max_length=512)
     description = models.TextField(blank=True)
@@ -38,11 +39,26 @@ class RelatedVideos(models.Model):
 
 class Units(models.Model):
     name = models.CharField(max_length=128)
-    mission = models.CharField(max_length=128)
-    sequenceid = models.IntegerField(default=0)
+    mission = models.ForeignKey('Missions',to_field="name")
+    sequenceid = models.FloatField(default=0.0)
 
     def __unicode__(self):
         return self.name
+        
+    class Meta:
+        unique_together = ('name', 'mission',)
+
+class Missions(models.Model):
+    name = models.CharField(max_length=128,unique=True)
+    slug = models.CharField(max_length=128)
+    sequenceid = models.IntegerField(default=0)
+    
+    def __unicode__(self):
+        return self.name
+
+class MissionMap(models.Model):
+    unit = models.ForeignKey('Units')
+    exercise = models.ForeignKey('Exercises',to_field="ka_id")
 
 class CommonCore(models.Model):
     category = models.CharField(max_length=128)

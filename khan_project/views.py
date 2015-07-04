@@ -23,7 +23,8 @@ def get_exercise_list(max_results=0,starts_with='',see_all=False):
 def home(request):
     exercises = get_exercise_list()
     template_name = 'exercises/index.html'
-    context_dict = {'exercise_list':exercises}
+    context_dict = {'skill_view':True,'exercise_list':exercises}
+    
     print('home was activated')
     return render(request,template_name,context_dict)
 

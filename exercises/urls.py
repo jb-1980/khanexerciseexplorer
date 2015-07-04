@@ -4,7 +4,8 @@ from exercises import views
 urlpatterns = patterns('',
 ##        url(r'^about/$',views.about,name='about'),
         url(r'^suggest_exercises/$',views.suggest_exercises,name='suggest_exercises'),
-        url(r'exercise_table/$',views.exercise_table,name='exercise_table'),
+        url(r'matrix_view/$',views.matrix_view,name='matrix_view'),
+        url(r'^matrix_view/(?P<mission>[a-zA-Z0-9_.-]+)/$',views.mission,name='mission'),
         url(r'^see_all/$',views.see_all,name='see_all'),
         url(r'^(?P<exercise_name_url>[a-zA-Z0-9_.-]+)/$', views.exercise, name='exercise'),
         

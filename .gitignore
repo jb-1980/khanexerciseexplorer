@@ -8,3 +8,5 @@ __pycache__/
 *.pot
 *.swp
 *.swo
+*cache2.json
+credentials
