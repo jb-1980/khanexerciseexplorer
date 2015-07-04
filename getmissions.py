@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 import time
-from datetime import date
+from datetime import date,timedelta
 import os
 
 def get_mission_tasks(mission):
@@ -58,7 +58,7 @@ def get_mission_tasks(mission):
 def check_cache(mission,expired):
     if not os.path.isfile(mission+'-cache2.json'):
         return False
-    if date.today() - date.fromtimestamp(os.stat(cachedir).st_mtime) > timedelta(expired):
+    if date.today() - date.fromtimestamp(os.stat(mission+'-cache2.json').st_mtime) > timedelta(expired):
         return False
     return True
 

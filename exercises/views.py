@@ -9,6 +9,12 @@ from exercises.models import Exercises,Prerequisites,Videos,RelatedVideos,Common
 
 # Create your views here.
 
+def encode_url(str):
+    return str.replace(' ', '_')
+
+def decode_url(str):
+    return str.replace('_', ' ')
+
 def get_exercise_list(max_results=0,starts_with='',see=False):
     exercise_list = []
     if starts_with:
@@ -28,20 +34,64 @@ def get_exercise_list(max_results=0,starts_with='',see=False):
 
 def matrix_view(request):
     missions = Missions.objects.order_by('sequenceid')
-    print(missions)
-    context_dict = {'matrix_view':True,'missions':missions}
+    context_dict = {'matrix_view':True,'missions':{'missions':missions}}
     template_name = 'exercises/matrix_view.html'
     
     return render(request,template_name,context_dict)
     
 def mission(request,mission):
     mission_record = Missions.objects.get(slug=mission)
-    print(mission_record.slug)
     units = Units.objects.filter(mission=mission_record).order_by('sequenceid')
     exercises = []
+    unit_list = []
     for unit in units:
-        exercises+=MissionMap.objects.filter(unit=unit)
-    context_dict = {'matrix_view':True,'exercises':[],'missions':units,'mission':mission_record}
+        exercises+=MissionMap.objects.filter(unit=unit).order_by('sequenceid')
+        unit_list.append({'name':unit.name,'slug':unit.slug})
+    context_dict = {
+        'matrix_view':True,
+        'exercises':[],
+        'missions':{'missions':False,'units':unit_list,'mission':mission_record},
+        'mission':mission_record,
+    }
+    for exercise in exercises:
+        prerequisites = Prerequisites.objects.filter(requiredfor=exercise.exercise.name)
+        videos = RelatedVideos.objects.filter(exercise=exercise.exercise.name)
+        try:
+            context_dict['exercises'].append({
+                'cc':CommonCoreMap.objects.filter(exercise=exercise.exercise),
+                'exercise':exercise.exercise,
+                'prerequisites':prerequisites,
+                'videos':videos,
+                'unit':exercise.unit
+                })            
+        except CommonCoreMap.DoesNotExist:
+            context_dict['exercises'].append({
+                'cc':None,
+                'exercise':exercise.exercise,
+                'prerequisites':prerequisites,
+                'videos':videos,
+                'unit':exercise.unit
+                })
+    template_name = 'exercises/mission.html'
+    
+    return render(request,template_name,context_dict)
+    
+def mission_unit(request,mission,unit):
+    mission_record = Missions.objects.get(slug=mission)
+    units = Units.objects.filter(mission=mission_record).order_by('sequenceid')
+    exercises = []
+    unit_list = []
+    for u in units:
+        unit_list.append({'name':u.name,'slug':u.slug})
+        if u.slug == unit:
+            exercises+=MissionMap.objects.filter(unit=u).order_by('sequenceid')
+            print('match found')
+    context_dict = {
+        'matrix_view':True,
+        'exercises':[],
+        'missions':{'missions':False,'units':unit_list,'mission':mission_record},
+        'mission':mission_record,
+    }
     for exercise in exercises:
         prerequisites = Prerequisites.objects.filter(requiredfor=exercise.exercise.name)
         videos = RelatedVideos.objects.filter(exercise=exercise.exercise.name)

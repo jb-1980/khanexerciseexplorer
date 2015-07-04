@@ -35,7 +35,7 @@ def populate():
             exercise_dict[exercise]['title'],
             exercise_dict[exercise]['description_html']
         )
-        #print(exercise,ex)
+        print('{exercise} created'.format(exercise=exercise))
         if exercise_dict[exercise]['prerequisites']:
             for pre in exercise_dict[exercise]['prerequisites']:
                 try:
@@ -130,13 +130,13 @@ def populate_missions():
         for indx,unit in enumerate(mission_tasks['topics']):
             sequenceid = float('.'.join([str(mission_sequence),str(indx)]))
             unit_record = add_units(unit,mission_record,sequenceid)
-            for task in mission_tasks['tasks'][unit]:
+            for sid,task in enumerate(mission_tasks['tasks'][unit]):
                 try:
                     exercise_record = Exercises.objects.get(ka_id=task)
                 except Exercises.DoesNotExist:
                     print('There is no record for exercise with ka_id {ka_id}'.format(ka_id=ka_id))
                     continue
-                add_missionmap(unit_record,exercise_record)
+                add_missionmap(unit_record,exercise_record,sid)
 
 def add_exercise(ka_id,name,image_url_256,ka_url,title,description):
     fields = {
@@ -221,14 +221,16 @@ def add_mission(name,slug,sequenceid):
         slug=slug,
         defaults=fields)[0]
 
-def add_missionmap(unit,exercise):
+def add_missionmap(unit,exercise,sequenceid):
     fields = {
         'unit':unit,
         'exercise':exercise,
+        'sequenceid':sequenceid,
     }
     return MissionMap.objects.update_or_create(
         unit=unit,
         exercise=exercise,
+        sequenceid=sequenceid,
         defaults=fields)[0]
         
 
@@ -240,9 +242,9 @@ if __name__ == '__main__':
     django.setup()
     from exercises.models import *
     
-#    print("Starting population script...")
-#    populate()
-#    print("Starting commoncore population...")
-#    populate_cc()
+    print("Starting population script...")
+    populate()
+    print("Starting commoncore population...")
+    populate_cc()
     print("Starting mission population...")
     populate_missions()

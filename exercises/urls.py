@@ -6,6 +6,7 @@ urlpatterns = patterns('',
         url(r'^suggest_exercises/$',views.suggest_exercises,name='suggest_exercises'),
         url(r'matrix_view/$',views.matrix_view,name='matrix_view'),
         url(r'^matrix_view/(?P<mission>[a-zA-Z0-9_.-]+)/$',views.mission,name='mission'),
+        url(r'^matrix_view/(?P<mission>[a-zA-Z0-9_.-]+)/(?P<unit>[a-zA-Z0-9_.-]+)$',views.mission_unit,name='mission_unit'),
         url(r'^see_all/$',views.see_all,name='see_all'),
         url(r'^(?P<exercise_name_url>[a-zA-Z0-9_.-]+)/$', views.exercise, name='exercise'),
         

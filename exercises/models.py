@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 # Create your models here.
 
@@ -40,8 +41,13 @@ class RelatedVideos(models.Model):
 class Units(models.Model):
     name = models.CharField(max_length=128)
     mission = models.ForeignKey('Missions',to_field="name")
+    slug = models.SlugField()
     sequenceid = models.FloatField(default=0.0)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Units, self).save(*args, **kwargs)
+    
     def __unicode__(self):
         return self.name
         
@@ -50,7 +56,7 @@ class Units(models.Model):
 
 class Missions(models.Model):
     name = models.CharField(max_length=128,unique=True)
-    slug = models.CharField(max_length=128)
+    slug = models.SlugField(max_length=128)
     sequenceid = models.IntegerField(default=0)
     
     def __unicode__(self):
@@ -59,6 +65,8 @@ class Missions(models.Model):
 class MissionMap(models.Model):
     unit = models.ForeignKey('Units')
     exercise = models.ForeignKey('Exercises',to_field="ka_id")
+    sequenceid = models.IntegerField(default=0)
+    
 
 class CommonCore(models.Model):
     category = models.CharField(max_length=128)

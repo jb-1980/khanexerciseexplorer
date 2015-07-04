@@ -1,6 +1,35 @@
 
-<ul class="nav nav-list">
-  {% for mission in missions %}
-    <li class="withripple"><a href="/exercises/matrix_view/{{mission.slug}}">{{ mission.name }}</a></li>
+
+{% if missions.missions %}
+  <ul class="nav nav-list">
+  {% for mission in missions.missions %}    
+    <li class="withripple">
+      <a href="/exercises/matrix_view/{{mission.slug}}">
+        {{ mission.name }}
+      </a>
+    </li>
   {% endfor %}
+  </ul>
+{% endif %}
+{% if missions.units %}
+  <ul class="nav nav-list">
+    <li>
+      <a href="/exercises/matrix_view">
+        <span style="font-weight:bold;">See all missions</span>
+      </a>
+    </li>
+  </ul>
+  <div style="width:100%;border-bottom:thin solid #009688;">
+    <span style="font-weight:bold;color:#009688;font-size:1.2em;">{{ missions.mission.name }} Units</span>
+  </div>
+  <ul class="nav nav-list">
+  {% for unit in missions.units %}
+      <li class="withripple">
+        <a href="/exercises/matrix_view/{{missions.mission.slug}}/{{unit.slug}}">
+          {{ unit.name }}
+        </a>
+      </li>
+  {% endfor %}
+  </ul>
+{% endif %}
 </ul>
