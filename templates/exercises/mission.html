@@ -19,7 +19,7 @@
         <tr>
           <td>{{ skill.unit.name }}</td>
           <td><a href="{{skill.exercise.ka_url}}" target="_blank">{{skill.exercise.title}}</a></td>
-          <td>{{ skill.exercise.description }}</td>
+          <td>{{ skill.exercise.description|safe }}</td>
           <td>
               {% if skill.videos%}
                   {% for rv in skill.videos %}
